@@ -1,18 +1,31 @@
+import 'package:cinemapedia/config/helpers/human_formats.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
+import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cinemapedia/presentation/providers/movies/movies_providers.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatelessWidget {
   static const name = 'HomeScreen';
 
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: _HomeView(),
+      bottomNavigationBar: CustomBottomNavigation(),
+    );
+  }
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeView extends ConsumerStatefulWidget {
+  const _HomeView();
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends ConsumerState<_HomeView> {
   @override
   void initState() {
     super.initState();
@@ -22,23 +35,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
-    if (nowPlayingMovies.isEmpty) {
+    // Esto es algo que yo agregé, no hace parte del curso
+    final currentDateTime = DateTime.now();
+    final formattedDate = HumanFormats.formatDate(currentDateTime);
+
+    if (slideShowMovies.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    return Material(
-      child: ListView.builder(
-        itemCount: nowPlayingMovies.length,
-        itemBuilder: (context, index) {
-          final movie = nowPlayingMovies[index];
-          return ListTile(
-            title: Text(movie.title),
-          );
-        },
-      ),
+    return Column(
+      children: [
+        const CustomAppbar(),
+        MoviesSlideShow(movies: slideShowMovies),
+        MovieHorizontalListview(
+          movies: nowPlayingMovies,
+          title: 'En cines',
+          subtitle: formattedDate,
+          loadNextPage: () =>
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+        ),
+      ],
     );
   }
 }
