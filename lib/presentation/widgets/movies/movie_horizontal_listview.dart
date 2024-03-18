@@ -17,12 +17,11 @@ class MovieHorizontalListview extends StatefulWidget {
       this.loadNextPage});
 
   @override
-  State<MovieHorizontalListview> createState() => _MovieHorizontalListviewState();
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
 }
 
 class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
-
-
   final scrollControler = ScrollController();
 
   @override
@@ -57,13 +56,15 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
             ),
           Expanded(
               child: ListView.builder(
-                controller: scrollControler,
+            controller: scrollControler,
             itemCount: widget.movies.length,
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              return _Slide(
-                movie: widget.movies[index],
+              return FadeInRight(
+                child: _Slide(
+                  movie: widget.movies[index],
+                ),
               );
             },
           )),

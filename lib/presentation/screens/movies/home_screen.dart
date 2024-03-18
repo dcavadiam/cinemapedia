@@ -37,8 +37,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
+
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
@@ -46,12 +49,6 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // Esto es algo que yo agregé, no hace parte del curso
     final currentDateTime = DateTime.now();
     final formattedDate = HumanFormats.formatDate(currentDateTime);
-
-    if (slideShowMovies.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
 
     return CustomScrollView(
       slivers: [
