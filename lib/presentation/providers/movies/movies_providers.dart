@@ -9,6 +9,27 @@ final nowPlayingMoviesProvider =
     fetchMoreMovies,
   );
 });
+final popularMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getPopular;
+  return MoviesNotifier(
+    fetchMoreMovies,
+  );
+});
+final upcomingMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getUpcoming;
+  return MoviesNotifier(
+    fetchMoreMovies,
+  );
+});
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+  return MoviesNotifier(
+    fetchMoreMovies,
+  );
+});
 
 // definir el caso de uso, que es el que se va a usar en el provider
 typedef MovieCallback = Future<List<Movie>> Function({int page});
