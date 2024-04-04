@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 
 class HumanFormats {
-  static String formatNumber(double number) {
+  static String formatNumber(double number, [int decimals = 0]) {
     final formatterNumber = NumberFormat.compactCurrency(
-            decimalDigits: 0, symbol: '', locale: 'en_US')
+            decimalDigits: decimals, symbol: '', locale: 'en_US')
         .format(number);
 
     return formatterNumber;
