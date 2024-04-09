@@ -3,34 +3,70 @@ import 'package:cinemapedia/presentation/views/views.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(initialLocation: '/', routes: [
-  ShellRoute(
-    builder: (context, state, child) {
-      return HomeScreen(childView: child);
-    },
-    routes: [
-      GoRoute(
-          path: "/",
+  // IMPLEMENTACIÓN OFICIAL DE GOROUTER EN EL CUSTOM BOTTOM NAV (GUARDA EL ESTADO DE LAS VISTAS)
+
+  StatefulShellRoute.indexedStack(
+    builder: (context, state, navigationShell) =>
+        HomeScreen(childView: navigationShell),
+    branches: [
+      StatefulShellBranch(routes: <RouteBase>[
+        GoRoute(
+            path: "/",
+            builder: (context, state) {
+              return const HomeView();
+            },
+            routes: [
+              GoRoute(
+                path: 'movie/:id',
+                name: MovieScreen.name,
+                builder: (context, state) {
+                  final movieID = state.pathParameters['id'] ?? 'no-id';
+                  return MovieScreen(movieId: movieID);
+                },
+              ),
+            ]),
+      ]),
+      StatefulShellBranch(routes: <RouteBase>[
+        GoRoute(
+          path: "/favorites",
           builder: (context, state) {
-            return const HomeView();
+            return const FavoritesView();
           },
-          routes: [
-            GoRoute(
-              path: 'movie/:id',
-              name: MovieScreen.name,
-              builder: (context, state) {
-                final movieID = state.pathParameters['id'] ?? 'no-id';
-                return MovieScreen(movieId: movieID);
-              },
-            ),
-          ]),
-      GoRoute(
-        path: "/favorites",
-        builder: (context, state) {
-          return const FavoritesView();
-        },
-      ),
+        ),
+      ]),
     ],
-  ),
+  )
+
+  // IMPLEMENTACIÓN OFICIAL DE GOROUTER EN EL CUSTOM BOTTOM NAV (NO GUARDA EL ESTADO DE LAS VISTAS)
+
+  // ShellRoute(
+  //   builder: (context, state, child) {
+  //     return HomeScreen(childView: child);
+  //   },
+  //   routes: [
+  //     GoRoute(
+  //         path: "/",
+  //         builder: (context, state) {
+  //           return const HomeView();
+  //         },
+  //         routes: [
+  //           GoRoute(
+  //             path: 'movie/:id',
+  //             name: MovieScreen.name,
+  //             builder: (context, state) {
+  //               final movieID = state.pathParameters['id'] ?? 'no-id';
+  //               return MovieScreen(movieId: movieID);
+  //             },
+  //           ),
+  //         ]),
+  //     GoRoute(
+  //       path: "/favorites",
+  //       builder: (context, state) {
+  //         return const FavoritesView();
+  //       },
+  //     ),
+  //   ],
+  // ),
 
   //RUTAS PADRE/HIJO
 
