@@ -3,9 +3,12 @@ import 'package:cinemapedia/domain/repositories/local_storage_repository.dart';
 import 'package:cinemapedia/presentation/providers/storage/local_storage_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final favoriteMoviesProvider = StateNotifierProvider<StorageMoviesNotifier, Map<int,Movie>>((ref) {
-  final localStorageRepository = ref.watch(localStorageRepositoryProvider); 
-    return StorageMoviesNotifier(localStorageRepository: localStorageRepository);
+final favoriteMoviesProvider =
+    StateNotifierProvider<StorageMoviesNotifier, Map<int, Movie>>(
+  (ref) {
+    final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+    return StorageMoviesNotifier(
+        localStorageRepository: localStorageRepository);
   },
 );
 
@@ -23,7 +26,7 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
 
   StorageMoviesNotifier({required this.localStorageRepository}) : super({});
 
-  Future<void> loadNextPage() async {
+  Future<List<Movie>> loadNextPage() async {
     final movies = await localStorageRepository.loadMovies(
         offset: page * 10); //TODO: Limit 20
     page++;
@@ -34,5 +37,7 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
     }
 
     state = {...state, ...tempMovieMap};
+
+    return movies;
   }
 }
