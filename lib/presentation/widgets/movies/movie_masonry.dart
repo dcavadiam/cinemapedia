@@ -39,7 +39,7 @@ class _MovieMasonryState extends State<MovieMasonry> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: MasonryGridView.count(
         controller: scrollController,
         crossAxisCount: 3,
@@ -53,7 +53,7 @@ class _MovieMasonryState extends State<MovieMasonry> {
                 const SizedBox(
                   height: 40,
                 ),
-                MoviePosterLink(movie: widget.movies[index])
+                MoviePosterLink(movie: widget.movies[index]),
               ],
             );
           }
